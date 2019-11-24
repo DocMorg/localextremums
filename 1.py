@@ -24,11 +24,12 @@ if __name__ == '__main__':
             min_elem = np.argmin(x[min_elem:max_elem])+min_elem
             index[-1] = min_elem
             index.append(max_elem)
-            assert index[-1] in maxs
+            s = set(maxs)
+            assert index[-1] in s, 'Minimum element is not minimum, as is supposed to be'
             assert max_elem - min_elem >= T
             assert x[max_elem] - x[min_elem] >= D
-            for i in range(min_elem+1, max_elem):
-                assert x[min_elem] < x[i] < x[max_elem]
+            assert np.all(np.logical_and(x[min_elem+1:max_elem] >= x[min_elem],
+                                         x[min_elem+1:max_elem] <= x[max_elem]))
             for min_elem in mins:
                 # checking the diff in values and in indexes, write if if suites
                 if x[max_elem] - x[min_elem] >= D and min_elem - max_elem >= T:
@@ -36,7 +37,8 @@ if __name__ == '__main__':
                     max_elem = np.argmax(x[max_elem:min_elem]) + max_elem
                     index[-1] = max_elem
                     index.append(min_elem)
-                    assert index[-1] in mins
+                    s1 = set(mins)
+                    assert index[-1] in s1
                     assert min_elem - max_elem >= T
                     assert x[max_elem] - x[min_elem] >= D
                     break
